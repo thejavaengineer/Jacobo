@@ -1,0 +1,50 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.1'
+    id 'io.spring.dependency-management' version '1.1.5'
+    id 'jacoco'
+}
+
+group = 'com.thejavaengineer'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'io.cucumber:cucumber-junit:4.8.0'
+    testImplementation 'io.cucumber:cucumber-java:4.8.0'
+    testImplementation 'io.cucumber:cucumber-java8:4.8.0'
+    testImplementation 'com.github.stefanbirkner:system-rules:1.19.0'
+    testImplementation 'com.github.stefanbirkner:system-lambda:1.2.1'
+}
+
+test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport // Report is generated after tests run
+}
+
+jacocoTestReport {
+    dependsOn test // Tests are required to run before generating the report
+
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+check.dependsOn jacocoTestReport // Ensure the code coverage report is generated during the check phase
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
